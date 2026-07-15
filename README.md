@@ -1,21 +1,85 @@
-# Basic Delivery Tracker
+# Last-Mile Delivery Tracker - Phase 1
 
-A simple, lightweight, and pure static single-page application (SPA) to log and manage local delivery orders.
+This project implements **Phase 1: Database Schema & Authentication (Core Infrastructure)** of the delivery tracker platform.
 
 ## Features
-- **Create**: Add new delivery orders with pickup address, dropoff address, weight, and status.
-- **Read**: View all logged orders in a simple structured table.
-- **Update**: Edit the delivery status of any order dynamically.
-- **Delete**: Cancel or remove orders from the tracker.
-- **Local Storage Persistence**: Uses the browser's `localStorage` to save your orders. Your data will remain intact even if you refresh or close the page.
+- **FastAPI Backend**: Built with FastAPI serving local JSON database storage and static files.
+- **Role-Based Users**: Support for `admin`, `customer`, and `agent` roles.
+- **JWT Authentication**: Safe logins using signed JWT tokens to verify identity sessions.
+- **Local JSON Database (`database.json`)**: Persistent JSON document registry seeding default credentials, zones, and pricing.
 
-## How to Run
-Since this application has no backend, database setup, or external dependencies, running it is extremely simple:
-1. Double-click the `index.html` file to open it in any modern web browser.
-2. Alternatively, open your browser and drag the `index.html` file into the window.
+---
 
-## Architecture
-- **Structure**: Vanilla HTML5
-- **Style**: Basic inline CSS
-- **Logic**: Vanilla client-side JavaScript
-- **Database**: Serialized JSON objects stored inside browser `localStorage`
+## 🚀 Setup & Execution Guide
+
+### Prerequisites
+- Python 3.10+ installed
+
+### Install Dependencies
+Run the following command to install the required packages:
+```bash
+pip install -r requirements.txt
+```
+
+### Start Backend API Server
+Run the FastAPI development server:
+```bash
+python main.py
+```
+Open **[http://localhost:3000](http://localhost:3000)** in your browser to interact with the authentication dashboard.
+
+---
+
+## 👥 Seed Profiles for Testing
+Use these credentials on the login screen to sign in as different roles:
+- **Admin**: `admin@aislop.delivery` / `admin123`
+- **Customer**: `customer@aislop.delivery` / `customer123`
+- **Rider Agent**: `agent1@aislop.delivery` / `agent123`
+
+---
+
+## 🧬 API Documentation
+
+### Authentication Endpoints
+
+#### 1. Login (`POST /api/auth/login`)
+- **Request Body**:
+  ```json
+  {
+    "email": "customer@aislop.delivery",
+    "password": "customer123"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "token": "eyJhbGciOi...",
+    "user": {
+      "id": "usr_customer1",
+      "email": "customer@aislop.delivery",
+      "role": "customer",
+      "name": "Premium Customer"
+    }
+  }
+  ```
+
+#### 2. Register Customer (`POST /api/auth/register`)
+- **Request Body**:
+  ```json
+  {
+    "email": "newuser@domain.com",
+    "password": "password123",
+    "name": "New Customer",
+    "role": "customer"
+  }
+  ```
+
+#### 3. Session Check (`GET /api/auth/me`)
+- **Headers**: `Authorization: Bearer <token>`
+- **Response**:
+  ```json
+  {
+    "authenticated": true,
+    "user": { ... }
+  }
+  ```
